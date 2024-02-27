@@ -1,0 +1,23 @@
+{
+  "name": "dependency-injection",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "vite",
+    "serve": "vite",
+    "build": "tsc && vite build",
+    "preinstall": "git submodule init && git submodule update && (cd vendor/motion-canvas && npm install && npx lerna run build)"
+  },
+  "dependencies": {
+    "@motion-canvas/internal": "file:vendor/motion-canvas/packages/internal",
+    "@motion-canvas/2d": "file:vendor/motion-canvas/packages/2d",
+    "@motion-canvas/core": "file:vendor/motion-canvas/packages/core",
+    "@motion-canvas/ffmpeg": "1.1.0"
+  },
+  "devDependencies": {
+    "@motion-canvas/ui": "file:vendor/motion-canvas/packages/ui",
+    "@motion-canvas/vite-plugin": "file:vendor/motion-canvas/packages/vite-plugin",
+    "typescript": "^5.2.2",
+    "vite": "^4.0.0"
+  }
+}
