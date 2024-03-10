@@ -87,11 +87,10 @@ public class Authenticator {
 
   yield* beginSlide("dependency");
 
-  yield code.edit(2)`\
+  yield code(
+    `\
 public class Authenticator {
-    ${remove(
-      "protected PasswordChecker passwordChecker;\n\n    public Authenticator() {\n        this.passwordChecker = new PasswordChecker();\n    }\n\n    "
-    )}public boolean isAuthenticated(
+    public boolean isAuthenticated(
         Session session,
         @Nullable String username,
         @Nullable String password
@@ -100,16 +99,15 @@ public class Authenticator {
             if (!session.isExpired()) {
                 return true;
             }
-            return ${replace(
-              "this.passwordChecker",
-              "PasswordChecker.INSTANCE"
-            )}.check(username, password);
+            return PasswordChecker.INSTANCE.check(username, password);
         }
         catch (CryptographyError error) {
             return false;
         }
     }
-}`;
+}`,
+    2
+  );
   yield* waitFor(1.5);
   yield* example1Window().height(700, 1);
 
@@ -159,11 +157,16 @@ export function getInstance(): Harbinger {
   yield example1Window().height(900, 1);
   yield* waitFor(0.5);
 
-  yield* code.edit(2)`\
+  yield* code(
+    `\
 public class Authenticator {
-    ${insert(
-      "protected PasswordChecker passwordChecker;\n\n    public Authenticator(PasswordChecker passwordChecker) {\n        this.passwordChecker = passwordChecker;\n    }\n\n    "
-    )}public boolean isAuthenticated(
+    protected PasswordChecker passwordChecker;
+
+    public Authenticator(PasswordChecker passwordChecker) {
+        this.passwordChecker = passwordChecker;
+    }
+
+    public boolean isAuthenticated(
         Session session,
         @Nullable String username,
         @Nullable String password
@@ -181,7 +184,9 @@ public class Authenticator {
             return false;
         }
     }
-}`;
+}`,
+    2
+  );
 
   yield* beginSlide("highlight-injection");
   const s2 = codeNode().findAllRanges("PasswordChecker passwordChecker");
